@@ -54,7 +54,7 @@ class ProductServiceApplicationTests {
     @Test
     void shouldReceiveProduct() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/product")
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
@@ -65,5 +65,4 @@ class ProductServiceApplicationTests {
                 .price(BigDecimal.valueOf(2000))
                 .build();
     }
-
 }
