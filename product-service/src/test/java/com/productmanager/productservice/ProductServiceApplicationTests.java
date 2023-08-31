@@ -24,7 +24,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @Testcontainers
 @AutoConfigureMockMvc
-//TODO: test GET method
 class ProductServiceApplicationTests {
     @Container
     static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:4.4.2");
@@ -50,6 +49,13 @@ class ProductServiceApplicationTests {
                         .content(requestAsString))
                 .andExpect(status().isCreated());
         Assertions.assertEquals(1, productRepository.findAll().size());
+    }
+
+    @Test
+    void shouldReceiveProduct() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/product")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     private ProductRequest getProductRequest() {
