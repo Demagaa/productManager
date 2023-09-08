@@ -31,6 +31,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class OrderServiceApplicationTests {
     @Container
     static MySQLContainer mySQLContainer = new MySQLContainer<>(DockerImageName.parse("mysql:8.0-debian"))
+            .withUsername("root")
+            .withPassword("root")
             .withReuse(true);
 
     @Autowired
@@ -42,7 +44,10 @@ class OrderServiceApplicationTests {
 
     @DynamicPropertySource
     static void setProperties(DynamicPropertyRegistry dynamicPropertyRegistry) {
-        dynamicPropertyRegistry.add("spring.data.mysql.uri", mySQLContainer::getJdbcUrl);
+        dynamicPropertyRegistry.add("spring.datasource.url", mySQLContainer::getJdbcUrl);
+        dynamicPropertyRegistry.add("spring.datasource.username", () -> mySQLContainer.getUsername());
+        dynamicPropertyRegistry.add("spring.datasource.password", () -> mySQLContainer.getPassword());
+        dynamicPropertyRegistry.add("spring.datasource.driverClassName", () -> mySQLContainer.getDriverClassName());
     }
 
     @Test

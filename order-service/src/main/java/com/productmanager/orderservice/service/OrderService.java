@@ -16,6 +16,7 @@ import java.util.UUID;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+
     public void placeOrder(OrderRequest orderRequest) {
         Order order = new Order();
         order.setOrderNumber(UUID.randomUUID().toString());
@@ -33,7 +34,7 @@ public class OrderService {
         OrderLineItems orderLineItems = new OrderLineItems();
         orderLineItems.setPrice(orderLineItemsDTO.getPrice());
         orderLineItems.setQuantity(orderLineItemsDTO.getQuantity());
-        orderLineItems.setSkuCode(orderLineItems.getSkuCode());
+        orderLineItems.setSkuCode(orderLineItemsDTO.getSkuCode());
         return orderLineItems;
     }
 }
