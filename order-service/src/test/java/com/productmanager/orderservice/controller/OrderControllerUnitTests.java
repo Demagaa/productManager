@@ -28,7 +28,7 @@ public class OrderControllerUnitTests {
     private OrderController orderController;
     @BeforeEach
     public void setup() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(orderController).build();
     }
 
