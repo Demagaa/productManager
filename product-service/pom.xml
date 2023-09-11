@@ -12,7 +12,7 @@
     <artifactId>product-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>product-service</name>
-    <description>product service for productManager app</description>
+    <description>product microservice for productManager app</description>
     <properties>
         <java.version>20</java.version>
     </properties>
