@@ -34,7 +34,7 @@ public class OrderServiceUnitTests {
 
     @BeforeEach
     public void setUp() {
-        orderService = new OrderService(orderRepository);
+        orderService = new OrderService(orderRepository, null);
     }
 
     @Test

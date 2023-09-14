@@ -12,6 +12,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Collections;
+
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -34,7 +36,7 @@ public class InventoryControllerUnitTests {
     @Test
     void testIfPresent() throws Exception {
         String skuCode = "test";
-        when(inventoryService.isInStock(skuCode)).thenReturn(true);
+        when(inventoryService.isInStock(Collections.singletonList(skuCode))).thenReturn();
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/inventory/" + skuCode)
                         .contentType(MediaType.APPLICATION_JSON))

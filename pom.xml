@@ -3,22 +3,48 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-  <packaging>pom</packaging>
+    <packaging>pom</packaging>
 
     <groupId>org.example</groupId>
     <artifactId>productManager</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-  <modules>
-    <module>inventory-service</module>
-    <module>product-service</module>
-    <module>order-service</module>
-  </modules>
+    <modules>
+        <module>inventory-service</module>
+        <module>product-service</module>
+        <module>order-service</module>
+        <module>discovery-server</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>20</maven.compiler.source>
         <maven.compiler.target>20</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-cloud.version>2022.0.3</spring-cloud.version>
+        <spring.framework.version>5.3.10</spring.framework.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.7.32</version> <!-- Use the latest version -->
+            </dependency>
+
+            <!-- SLF4J Implementation (e.g., Logback) -->
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>1.2.6</version> <!-- Use the latest version -->
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
