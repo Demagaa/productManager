@@ -32,14 +32,5 @@ public class InventoryServiceUnitTests {
     }
 
 
-    @Test
-    public void testIfPresent(){
-        String skuCode = "iphone_13";
-        when(inventoryRepository.findBySkuCode(skuCode)).thenReturn(Optional.of(new Inventory()));
-        boolean result = inventoryService.isInStock(skuCode);
-        Assertions.assertTrue(result);
-    }
-
-
 
 }

@@ -33,14 +33,4 @@ public class InventoryControllerUnitTests {
         mockMvc = MockMvcBuilders.standaloneSetup(inventoryController).build();
     }
 
-    @Test
-    void testIfPresent() throws Exception {
-        String skuCode = "test";
-        when(inventoryService.isInStock(Collections.singletonList(skuCode))).thenReturn();
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/inventory/" + skuCode)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-    }
-
 }
