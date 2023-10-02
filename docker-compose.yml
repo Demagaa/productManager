@@ -2,16 +2,16 @@
 version: '3.7'
 services:
   ## MySQL Docker Compose Config
-  postgres-order:
-    container_name: postgres-order
-    image: postgres
+  mysql-order:
+    container_name: mysql-order
+    image: mysql
     environment:
-      POSTGRES_DB: order-service
-      POSTGRES_USER: ptechie
-      POSTGRES_PASSWORD: password
-      PGDATA: /data/postgres
+      MYSQL_DB: order-service
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_DATA: /data/mysql
     volumes:
-      - ./postgres-order:/data/postgres
+      - ./mysql-order:/data/mysql
     expose:
       - "5431"
     ports:
@@ -19,16 +19,16 @@ services:
     command: -p 5431
     restart: always
 
-  postgres-inventory:
-    container_name: postgres-inventory
-    image: postgres
+  mysql-inventory:
+    container_name: mysql-inventory
+    image: mysql
     environment:
-      POSTGRES_DB: inventory-service
-      POSTGRES_USER: ptechie
-      POSTGRES_PASSWORD: password
-      PGDATA: /data/postgres
+      MYSQL_DB: inventory-service
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_DATA: /data/mysql
     volumes:
-      - ./postgres-inventory:/data/postgres
+      - ./mysql-inventory:/data/mysql
     ports:
       - "5432:5432"
     restart: always
@@ -110,7 +110,7 @@ services:
 
   ## Eureka Server
   discovery-server:
-    image: microservices-tutorial/discovery-server:latest
+    image: productmanager/discovery-server:latest
     container_name: discovery-server
     ports:
       - "8761:8761"
@@ -120,7 +120,7 @@ services:
       - zipkin
 
   api-gateway:
-    image: microservices-tutorial/api-gateway:latest
+    image: productmanager/api-gateway:latest
     container_name: api-gateway
     ports:
       - "8181:8080"
@@ -137,7 +137,7 @@ services:
   ## Product-Service Docker Compose Config
   product-service:
     container_name: product-service
-    image: microservices-tutorial/product-service:latest
+    image: productmanager/product-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
@@ -148,12 +148,12 @@ services:
   ## Order-Service Docker Compose Config
   order-service:
     container_name: order-service
-    image: microservices-tutorial/order-service:latest
+    image: productmanager/order-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-order:5431/order-service
+      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/order-service
     depends_on:
-      - postgres-order
+      - mysql-order
       - broker
       - zipkin
       - discovery-server
@@ -162,19 +162,19 @@ services:
   ## Inventory-Service Docker Compose Config
   inventory-service:
     container_name: inventory-service
-    image: microservices-tutorial/inventory-service:latest
+    image: productmanager/inventory-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-inventory:5432/inventory-service
+      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/inventory-service
     depends_on:
-      - postgres-inventory
+      - mysql-inventory
       - discovery-server
       - api-gateway
 
   ## Notification-Service Docker Compose Config
   notification-service:
     container_name: notification-service
-    image: microservices-tutorial/notification-service:latest
+    image: productmanager/notification-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
@@ -182,32 +182,3 @@ services:
       - broker
       - discovery-server
       - api-gateway
-
-  ## Prometheus
-  prometheus:
-    image: prom/prometheus:v2.37.1
-    container_name: prometheus
-    restart: always
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-    depends_on:
-      - product-service
-      - inventory-service
-      - order-service
-      - notification-service
-
-  grafana:
-    image: grafana/grafana-oss:8.5.2
-    container_name: grafana
-    restart: always
-    ports:
-      - "3000:3000"
-    links:
-      - prometheus:prometheus
-    volumes:
-      - ./grafana:/var/lib/grafana
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=password
