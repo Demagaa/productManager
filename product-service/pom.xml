@@ -9,8 +9,6 @@
     </parent>
 
     <artifactId>product-service</artifactId>
-    <name>product-service</name>
-    <description>product microservice</description>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
