@@ -1,6 +1,7 @@
 # productManager
 
 Simple microservices project built in study purpose with Spring Boot and Spring Cloud technologies
+![image](https://github.com/Demagaa/productManager/assets/90135638/8cb4171e-e6ea-42d5-8bc1-117a0b23728d)
 
 ## Technologies: 
 
