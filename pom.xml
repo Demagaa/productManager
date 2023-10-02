@@ -21,12 +21,12 @@
         <module>order-service</module>
         <module>discovery-server</module>
         <module>api-gateway</module>
-        <module>noti</module>
+        <module>notification-service</module>
     </modules>
 
     <properties>
-        <maven.compiler.source>20</maven.compiler.source>
-        <maven.compiler.target>20</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <spring-cloud.version>2022.0.1</spring-cloud.version>
         <testcontainers.version>1.17.6</testcontainers.version>
     </properties>
@@ -81,7 +81,7 @@
                 <version>3.2.1</version>
                 <configuration>
                     <from>
-                        <image>amazoncorretto:20.0.2</image>
+                        <image>eclipse-temurin:17.0.4.1_1-jre</image>
                     </from>
                     <to>
                         <image>registry.hub.docker.com/demagaa/${project.artifactId}</image>
