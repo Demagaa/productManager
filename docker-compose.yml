@@ -4,33 +4,31 @@ services:
   ## MySQL Docker Compose Config
   mysql-order:
     container_name: mysql-order
-    image: mysql
+    image: mysql:5.7
     environment:
       MYSQL_DB: order-service
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
       MYSQL_DATA: /data/mysql
     volumes:
-      - ./mysql-order:/data/mysql
+      - ./mysql-order_data:/var/lib/mysql
     expose:
-      - "5431"
+      - "3307"
     ports:
-      - "5431:5431"
-    command: -p 5431
+      - "3307:3307"
+
     restart: always
 
   mysql-inventory:
     container_name: mysql-inventory
-    image: mysql
+    image: mysql:5.7
     environment:
       MYSQL_DB: inventory-service
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
       MYSQL_DATA: /data/mysql
     volumes:
-      - ./mysql-inventory:/data/mysql
+      - ./mysql-inventory_data:/var/lib/mysql
     ports:
-      - "5432:5432"
+      - "3308:3308"
     restart: always
 
   ## Mongo Docker Compose Config
@@ -151,7 +149,7 @@ services:
     image: demagaa/order-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/order-service
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-order:3307/order-service
     depends_on:
       - mysql-order
       - broker
@@ -165,7 +163,7 @@ services:
     image: demagaa/inventory-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/inventory-service
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-inventory:3308/inventory-service
     depends_on:
       - mysql-inventory
       - discovery-server
@@ -182,3 +180,32 @@ services:
       - broker
       - discovery-server
       - api-gateway
+
+  ## Prometheus
+  prometheus:
+    image: prom/prometheus:v2.37.1
+    container_name: prometheus
+    restart: always
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - product-service
+      - inventory-service
+      - order-service
+      - notification-service
+
+  grafana:
+    image: grafana/grafana-oss:8.5.2
+    container_name: grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    links:
+      - prometheus:prometheus
+    volumes:
+      - ./grafana:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=password
