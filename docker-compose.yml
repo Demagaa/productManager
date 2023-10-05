@@ -4,31 +4,36 @@ services:
   ## MySQL Docker Compose Config
   mysql-order:
     container_name: mysql-order
-    image: mysql:5.7
+    build:
+      context: .
+      dockerfile: Dockerfile.order
     environment:
-      MYSQL_DB: order-service
+      MYSQL_DB: orderservice
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATA: /data/mysql
     volumes:
       - ./mysql-order_data:/var/lib/mysql
-    expose:
-      - "3307"
+      - /productmanager/mysql-order-scripts:/docker-entrypoint-initdb.d/
+      - /productmanager/mysql-order-scripts
     ports:
-      - "3307:3307"
-
+      - "3307:3306"
     restart: always
 
   mysql-inventory:
     container_name: mysql-inventory
-    image: mysql:5.7
+    build:
+      context: .
+      dockerfile: Dockerfile.inventory
     environment:
-      MYSQL_DB: inventory-service
+      MYSQL_DB: inventoryservice
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATA: /data/mysql
     volumes:
-      - ./mysql-inventory_data:/var/lib/mysql
+    - ./mysql-inventory_data:/var/lib/mysql
+    - /productmanager/mysql-inventory-scripts:/docker-entrypoint-initdb.d/
+    - /productmanager/mysql-inventory-scripts
     ports:
-      - "3308:3308"
+    - "3308:3306"
     restart: always
 
   ## Mongo Docker Compose Config
@@ -149,7 +154,7 @@ services:
     image: demagaa/order-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-order:3307/order-service
+      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3307/orderservice
     depends_on:
       - mysql-order
       - broker
@@ -163,7 +168,7 @@ services:
     image: demagaa/inventory-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-inventory:3308/inventory-service
+      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3308/inventoryservice
     depends_on:
       - mysql-inventory
       - discovery-server

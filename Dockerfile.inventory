@@ -1,0 +1,4 @@
+FROM mysql:5.7
+# Copy your data.sql script into the container
+COPY ./inventory-service/src/main/resources/data.sql /productmanager/mysql-invent0ory-scripts:/docker-entrypoint-initdb.d/
+

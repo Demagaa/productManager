@@ -1,0 +1,4 @@
+FROM mysql:5.7
+
+# Copy your data.sql script into the container
+COPY ./order-service/src/main/resources/data.sql /productmanager/mysql-order-scripts:/docker-entrypoint-initdb.d/
